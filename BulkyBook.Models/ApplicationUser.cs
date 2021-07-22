@@ -10,6 +10,7 @@ namespace BulkyBook.Models
 {
     public class ApplicationUser : IdentityUser
     {
+
         [NotMapped]
         public string Role { get; set; }
 

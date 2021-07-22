@@ -144,7 +144,7 @@ namespace BulkyBook.Areas.Identity.Pages.Account
                         else
                         {
                             //Admin registering a new user
-                            return RedirectToAction("Index", "User", new { Area = "Admin" });
+                            return RedirectToAction("Index", "Users", new { Area = "Admin" });
                         }
                     }
                 }
