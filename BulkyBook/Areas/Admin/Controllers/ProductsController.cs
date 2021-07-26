@@ -9,24 +9,19 @@ using BulkyBook.DataAccess.Data;
 using BulkyBook.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
-using Microsoft.AspNetCore.Authorization;
-using BulkyBook.Utility;
 
 namespace BulkyBook.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
-
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-
-        public ProductsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ProductsController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Admin/Products
@@ -69,11 +64,23 @@ namespace BulkyBook.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,ISBN,Author,ListPrice,Price,Price50,Price100,ImageUrl,CategoryId,CoverTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Author,Price,ImageUrl,CategoryId,CoverTypeId")] Product product)
         {
             if (ModelState.IsValid)
             {
-      
+              /*  string webRootPath = _hostEnvironment.WebRootPath;
+                var files = HttpContext.Request.Form.Files;
+                if (files.Count > 0)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(webRootPath, @"images\products");
+                    var extenstion = Path.GetExtension(files[0].FileName);
+                    using (var filesStreams = new FileStream(Path.Combine(uploads, fileName + extenstion), FileMode.Create))
+                    {
+                        files[0].CopyTo(filesStreams);
+                    }
+                    product.ImageUrl = @"\images\products\" + fileName + extenstion;
+                }*/
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
@@ -107,7 +114,7 @@ namespace BulkyBook.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,ISBN,Author,ListPrice,Price,Price50,Price100,ImageUrl,CategoryId,CoverTypeId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Author,Price,ImageUrl,CategoryId,CoverTypeId")] Product product)
         {
             if (id != product.Id)
             {

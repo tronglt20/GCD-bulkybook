@@ -15,7 +15,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Title" class="control-label"></label>
+                    <label asp-for="Title"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="Title" class="form-control" />
@@ -24,73 +24,64 @@
             </div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Description" class="control-label"></label>
+                    <label asp-for="Description"></label>
                 </div>
                 <div class="col-8">
-                    <textarea  asp-for="Description" class="form-control"  rows="3"></textarea>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="ISBN" class="control-label"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="ISBN" class="form-control" />
-                    <span asp-validation-for="ISBN" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="Author" class="control-label"></label>
+                    <label asp-for="Author"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="Author" class="form-control" />
                     <span asp-validation-for="Author" class="text-danger"></span>
                 </div>
             </div>
-        
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Price" class="control-label"></label>
+                    <label asp-for="Price"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="Price" class="form-control" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
             </div>
-       
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="ImageUrl" class="control-label"></label>
+                    <label asp-for="ImageUrl"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="ImageUrl" type="file"/>
+                    <input asp-for="ImageUrl"  />
                     <span asp-validation-for="ImageUrl" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="CategoryId" class="control-label"></label>
-
+                    <label asp-for="CategoryId"></label>
                 </div>
                 <div class="col-8">
                     <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
-                        <option value="">- Select category</option>
+                        <option value="">- Select a Category</option>
                     </select>
+
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="CoverTypeId" class="control-label"></label>
+                    <label asp-for="CoverTypeId"></label>
                 </div>
                 <div class="col-8">
                     <select asp-for="CoverTypeId" class="form-control" asp-items="ViewBag.CoverTypeId">
-                        <option value="">- Select cover type</option>
+                        <option value="">- Select Cover Type</option>
                     </select>
                 </div>
-
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

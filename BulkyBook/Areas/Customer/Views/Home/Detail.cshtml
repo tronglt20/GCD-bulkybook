@@ -1,0 +1,72 @@
+﻿@model BulkyBook.Models.ShoppingCart
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" asp-for="Count" />
+
+    <div class="container backgroundWhite">
+        <div class="card p-4">
+            <div class="container row">
+                <dl class="col-12 col-md-8 row">
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Product.Title)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Product.Title)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Product.Description)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Product.Description)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Product.Author)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Product.Author)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Product.Price)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Product.Price)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Product.Category)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Product.Category.Name)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Product.CoverType)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Product.CoverType.Name)
+                    </dd>
+                </dl>
+                <div class="col-12 col-md-4">
+                    <img src="@Url.Content(@Model.Product.ImageUrl) " alt="@Html.DisplayNameFor(model=>model.Product.ImageUrl)" />>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <button type="submit" value="Add to Cart" class="btn btn-primary btn-square btn-lg form-control">Add to Cart</button>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+
+</form>
+
+

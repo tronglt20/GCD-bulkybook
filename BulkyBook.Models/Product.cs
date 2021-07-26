@@ -17,8 +17,7 @@ namespace BulkyBook.Models
         public string Title { get; set; }
         [Required]
         public string Description { get; set; }
-        [Required]
-        public string ISBN { get; set; }
+   
         [Required]
         public string Author { get; set; }
      
