@@ -1,4 +1,5 @@
 ﻿using BulkyBook.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,7 +27,7 @@ namespace BulkyBook.Models
         [Range(1, 1000)]
         public double Price { get; set; }
   
-        [Required]
+       
         [Display(Name = "Upload File")]
         public string ImageUrl { get; set; }
 

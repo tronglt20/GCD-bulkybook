@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BulkyBook.Utility
@@ -21,12 +22,12 @@ namespace BulkyBook.Utility
         {
             return Execute(emailOptions.SendGridKey, subject, htmlMessage, email);
         }
-        private Task Execute(string sendGridKey,string subject, string htmlMessage, string email)
+        private Task Execute(string sendGridKey,string subject, string message, string email)
         {
             var client = new SendGridClient(sendGridKey);
             var from = new EmailAddress("admin@gmail.com", "Bulky Book");
-            var to = new EmailAddress(email, "End User");
-            var msg = MailHelper.CreateSingleEmail(from, to, subject,"",htmlMessage);
+            var to = new EmailAddress(email);
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, "", message);
             return client.SendEmailAsync(msg);
         }
     }

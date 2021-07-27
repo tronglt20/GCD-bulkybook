@@ -68,7 +68,7 @@ namespace BulkyBook.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-              /*  string webRootPath = _hostEnvironment.WebRootPath;
+                string webRootPath = _hostEnvironment.WebRootPath;
                 var files = HttpContext.Request.Form.Files;
                 if (files.Count > 0)
                 {
@@ -80,7 +80,7 @@ namespace BulkyBook.Areas.Admin.Controllers
                         files[0].CopyTo(filesStreams);
                     }
                     product.ImageUrl = @"\images\products\" + fileName + extenstion;
-                }*/
+                }
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
@@ -125,7 +125,29 @@ namespace BulkyBook.Areas.Admin.Controllers
             {
                 try
                 {
+                    string webRootPath = _hostEnvironment.WebRootPath;
+                    var files = HttpContext.Request.Form.Files;
+                    if (files.Count > 0)
+                    {
+                        string fileName = Guid.NewGuid().ToString();
+                        var uploads = Path.Combine(webRootPath, @"images\products");
+                        var extenstion = Path.GetExtension(files[0].FileName);
+
+                        if (product.ImageUrl != null)
+                        {
+                            //this is an edit and we need to remove old image
+                            var imagePath = Path.Combine(webRootPath, product.ImageUrl.TrimStart('\\'));
+                            if (System.IO.File.Exists(imagePath))
+                            {
+                                System.IO.File.Delete(imagePath);
+                            }
+                        }
+                      
+                        product.ImageUrl = @"\images\products\" + fileName + extenstion;
+                    }
+
                     _context.Update(product);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

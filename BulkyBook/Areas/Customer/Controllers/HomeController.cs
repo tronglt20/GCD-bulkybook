@@ -63,7 +63,7 @@ namespace BulkyBook.Areas.Customer.Controllers
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         [Authorize]
-        public async Task<IActionResult> AddToCart(ShoppingCart CartObject)
+       /* public async Task<IActionResult> AddToCart(ShoppingCart CartObject)
         {
             CartObject.Id = 0;
 
@@ -100,7 +100,7 @@ namespace BulkyBook.Areas.Customer.Controllers
                 }
             }
 
-        }
+        }*/
 
 
 

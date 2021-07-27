@@ -121,6 +121,7 @@ namespace BulkyBook.Areas.Identity.Pages.Account
 
                     }
 
+                    // Email Sender
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
