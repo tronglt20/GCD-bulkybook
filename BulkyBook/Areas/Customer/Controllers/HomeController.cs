@@ -63,12 +63,12 @@ namespace BulkyBook.Areas.Customer.Controllers
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         [Authorize]
-       /* public async Task<IActionResult> AddToCart(ShoppingCart CartObject)
+        public async Task<IActionResult> Detail(ShoppingCart CartObject)
         {
             CartObject.Id = 0;
 
             if (ModelState.IsValid)
-            {   
+            {
                 // add to cart
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -76,14 +76,22 @@ namespace BulkyBook.Areas.Customer.Controllers
 
                 ShoppingCart cartFromDb = _context.ShoppingCarts.FirstOrDefault(
                     u => u.ApplicationUserId == CartObject.ApplicationUserId && u.ProductId == CartObject.ProductId);
-                if(cartFromDb == null)
+                if (cartFromDb == null)
                 {
                     // no record exits in database for that user for thatproduct
+                    _context.ShoppingCarts.Add(CartObject);
                 }
+                else
+                {
+                    CartObject.Count += cartFromDb.Count;
+                    _context.ShoppingCarts.Update(CartObject);
+                }
+
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
             else
             {
-
                 var product = await _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.CoverType)
@@ -93,14 +101,10 @@ namespace BulkyBook.Areas.Customer.Controllers
                     Product = product,
                     ProductId = product.Id
                 };
-
-                if (product == null)
-                {
-                    return NotFound();
-                }
+                return View(cartObj);
             }
 
-        }*/
+        }
 
 
 

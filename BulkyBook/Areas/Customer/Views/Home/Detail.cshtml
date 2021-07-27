@@ -8,7 +8,6 @@
 <h1>Details</h1>
 
 <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="ProductId" />
     <input type="hidden" asp-for="Count" />
 
@@ -54,12 +53,12 @@
                     </dd>
                 </dl>
                 <div class="col-12 col-md-4">
-@*                    <img src="@Url.Content(@Model.Product.ImageUrl) " alt="@Html.DisplayNameFor(model=>model.Product.ImageUrl)" />*@
+                    <img src="  @Html.DisplayFor(model => model.Product.ImageUrl)" class="card-img-top rounded"/>
                 </div>
             </div>
 
             <div class="col-12 col-md-3">
-                <button type="submit" value="Add to Cart" class="btn btn-primary btn-square btn-lg form-control">Add to Cart</button>
+                <button type="submit" class="btn btn-primary btn-square btn-lg form-control">Add to Cart</button>
             </div>
         </div>
         <div>
