@@ -1,0 +1,92 @@
+﻿@model IEnumerable<BulkyBook.Models.ReqAccess>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var status = Context.Request.Query["status"];
+
+    var inprocess = "text-primary";
+    var accepted = "text-primary";
+    var rejected = "text-primary";
+    var all = "text-primary";
+
+
+    switch (status)
+    {
+        case "inprocess":
+            inprocess = "active";
+            break;
+        case "accepted":
+            accepted = "active";
+            break;
+        case "rejected":
+            rejected = "active";
+            break;
+        default:
+            all = "active";
+            break;
+    }
+}
+
+<br />
+<div class="border p-1">
+    <div class="d-flex justify-content-between">
+        <div class="p-2">
+            <h2 class="text-primary">Order's List</h2>
+        </div>
+        <div class="p-1">
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none" asp-controller="ReqAccess" asp-action="Index" asp-route-status="inprocess">
+                <li class="list-group-item @inprocess">In Process</li>
+                </a>
+                <a style="text-decoration:none" asp-controller="ReqAccess" asp-action="Index" asp-route-status="accepted">
+                <li class="list-group-item @accepted">Accepted</li>
+                </a>
+                <a style="text-decoration:none" asp-controller="ReqAccess" asp-action="Index" asp-route-status="rejected">
+                <li class="list-group-item @rejected">Rejected</li>
+                </a>
+                <a style="text-decoration:none" asp-controller="ReqAccess" asp-action="Index" asp-route-status="all">
+                    <li class="list-group-item @all">All</li>
+                </a>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>         
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                
+                <td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

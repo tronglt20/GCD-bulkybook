@@ -24,6 +24,7 @@ namespace BulkyBook.Areas.Admin.Controllers
             _hostEnvironment = hostEnvironment;
         }
 
+
         // GET: Admin/Products
         public async Task<IActionResult> Index()
         {

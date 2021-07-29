@@ -1,6 +1,7 @@
 ﻿using BulkyBook.DataAccess.Data;
 using BulkyBook.Models;
 using BulkyBook.Models.ViewModels;
+using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,13 +19,13 @@ namespace BulkyBook.Areas.Customer.Controllers
     [Area("Customer")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        /*private readonly ILogger<HomeController> _logger;*/
         private readonly ApplicationDbContext _context;
 
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            /*_logger = logger;*/
             _context = context;
         }
 
@@ -34,9 +35,10 @@ namespace BulkyBook.Areas.Customer.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-      
+
         public async Task<IActionResult> Detail(int? id)
         {
+            
             if (id == null)
             {
                 return NotFound();
@@ -46,48 +48,59 @@ namespace BulkyBook.Areas.Customer.Controllers
                 .Include(p => p.Category)
                 .Include(p => p.CoverType)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            ShoppingCart cartObj = new ShoppingCart()
-            {
-                Product = product,
-                ProductId = product.Id
-            };
 
-            if (product == null)
-            {
-                return NotFound();
-            }
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+           
 
-            return View(cartObj);
+            ReqAccess reqAccess = _context.ReqAccess.FirstOrDefault(
+                u => u.ApplicationUserId == claim.Value && u.ProductId == product.Id);
+
+            if(reqAccess == null)
+            {
+                reqAccess = new ReqAccess()
+                {
+                    Product = product,
+                    ProductId = product.Id,
+                    Status = SD.Status_Block
+                };
+            }     
+            return View(reqAccess);
         }
 
-        [HttpPost]
-        [AutoValidateAntiforgeryToken]
         [Authorize]
-        public async Task<IActionResult> Detail(ShoppingCart CartObject)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Detail(ReqAccess Object)
         {
-            CartObject.Id = 0;
+            Object.Id = 0;
 
             if (ModelState.IsValid)
             {
-                // add to cart
+
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-                CartObject.ApplicationUserId = claim.Value;
+                Object.ApplicationUserId = claim.Value;
 
-                ShoppingCart cartFromDb = _context.ShoppingCarts.FirstOrDefault(
-                    u => u.ApplicationUserId == CartObject.ApplicationUserId && u.ProductId == CartObject.ProductId);
-                if (cartFromDb == null)
+                ReqAccess reqFromDb = _context.ReqAccess.FirstOrDefault(
+                    u => u.ApplicationUserId == Object.ApplicationUserId && u.ProductId == Object.ProductId);
+
+                if (reqFromDb == null)
                 {
                     // no record exits in database for that user for thatproduct
-                    _context.ShoppingCarts.Add(CartObject);
+                    Object.Status = SD.Status_InProcess;
+                    _context.ReqAccess.Update(Object);
                 }
                 else
-                {
-                    CartObject.Count += cartFromDb.Count;
-                    _context.ShoppingCarts.Update(CartObject);
+                { // return POP UP message
                 }
 
                 _context.SaveChanges();
+
+               // var count = _context.ShoppingCarts
+               //     .ToArrayAsync(u => u.ApplicationUserId == CartObject.ApplicationUserId)
+               //     .ToList().Count();
+
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -95,19 +108,16 @@ namespace BulkyBook.Areas.Customer.Controllers
                 var product = await _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.CoverType)
-                .FirstOrDefaultAsync(m => m.Id == CartObject.ProductId);
-                ShoppingCart cartObj = new ShoppingCart()
+                .FirstOrDefaultAsync(m => m.Id == Object.ProductId);
+                ReqAccess obj = new ReqAccess()
                 {
                     Product = product,
                     ProductId = product.Id
                 };
-                return View(cartObj);
+                return View(obj);
             }
 
         }
-
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

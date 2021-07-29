@@ -1,16 +1,17 @@
-﻿@model BulkyBook.Models.ShoppingCart
+﻿@model BulkyBook.Models.ReqAccess
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <h1>Details</h1>
 
-<form method="post">
-    <input type="hidden" asp-for="ProductId" />
-    <input type="hidden" asp-for="Count" />
 
+<form asp-action="detail" method="post">
+    <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" value="@Model.Status" id="status" />
     <div class="container backgroundWhite">
         <div class="card p-4">
             <div class="container row">
@@ -51,21 +52,27 @@
                     <dd class="col-sm-8">
                         @Html.DisplayFor(model => model.Product.CoverType.Name)
                     </dd>
+
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Status)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Status)
+                    </dd>
                 </dl>
                 <div class="col-12 col-md-4">
-                    <img src="  @Html.DisplayFor(model => model.Product.ImageUrl)" class="card-img-top rounded"/>
+                    <img src="  @Html.DisplayFor(model => model.Product.ImageUrl)" class="card-img-top rounded" />
                 </div>
             </div>
 
             <div class="col-12 col-md-3">
-                <button type="submit" class="btn btn-primary btn-square btn-lg form-control">Add to Cart</button>
+                <button type="submit" class="btn btn-primary btn-square btn-lg form-control">Read</button>
             </div>
         </div>
         <div>
             <a asp-action="Index">Back to List</a>
         </div>
     </div>
-
 </form>
 
 
