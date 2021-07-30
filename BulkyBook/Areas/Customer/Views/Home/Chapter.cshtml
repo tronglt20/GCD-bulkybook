@@ -1,0 +1,53 @@
+﻿@model BulkyBook.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div>
+    <h4>
+        @Html.DisplayFor(model => model.Title)
+    </h4>
+    <hr />
+    <div class="container backgroundWhite">
+        <div class="card p-4">
+            <div class="container row">
+                <dl class="col-12 col-md-8 row">                           
+                </dl>
+                <div class="col-12 col-md-4">
+                    <img src="  @Html.DisplayFor(model => model.ImageUrl)" class="card-img-top rounded" />
+                    <br />
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Category)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Category.Name)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.CoverType)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.CoverType.Name)
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Author)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Author)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <button type="submit" class="btn btn-primary btn-square btn-lg form-control" onclick="return validateStatus()">Read</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

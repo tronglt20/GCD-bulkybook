@@ -9,7 +9,7 @@
 <h1>Details</h1>
 
 
-<form asp-action="detail" method="post">
+<form  asp-action="Detail"  method="post">
     <input type="hidden" asp-for="ProductId" />
     <input type="hidden" value="@Model.Status" id="status" />
     <div class="container backgroundWhite">
@@ -66,7 +66,7 @@
             </div>
 
             <div class="col-12 col-md-3">
-                <button type="submit" class="btn btn-primary btn-square btn-lg form-control">Read</button>
+                <button type="submit" class="btn btn-primary btn-square btn-lg form-control" onclick="return validateStatus()">Read</button>
             </div>
         </div>
         <div>
@@ -75,4 +75,35 @@
     </div>
 </form>
 
+
+<script>
+    function validateStatus() {
+        var status = document.getElementById("status").value;
+        switch (status) {
+            case "Block":
+                if (confirm("Request to accept this book")) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+            case "InProcess":
+                swal({
+                    text: "Your request is on process",
+                });
+                return false;
+                break;
+            case "Rejected":
+                swal({
+                    text: "You can not access this book",
+                });
+                return false;
+                break;
+            default:
+                return true;
+                break;
+        }
+       
+    }
+</script>
 

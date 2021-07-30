@@ -6,7 +6,7 @@
 
     var status = Context.Request.Query["status"];
 
-    var inprocess = "text-primary";
+   @* var inprocess = "text-primary";
     var accepted = "text-primary";
     var rejected = "text-primary";
     var all = "text-primary";
@@ -26,16 +26,16 @@
         default:
             all = "active";
             break;
-    }
+    }*@
 }
 
 <br />
 <div class="border p-1">
     <div class="d-flex justify-content-between">
         <div class="p-2">
-            <h2 class="text-primary">Order's List</h2>
+            <h2 class="text-primary">Request's List</h2>
         </div>
-        <div class="p-1">
+        @*<div class="p-1">
             <ul class="list-group list-group-horizontal-sm">
                 <a style="text-decoration:none" asp-controller="ReqAccess" asp-action="Index" asp-route-status="inprocess">
                 <li class="list-group-item @inprocess">In Process</li>
@@ -47,46 +47,93 @@
                 <li class="list-group-item @rejected">Rejected</li>
                 </a>
                 <a style="text-decoration:none" asp-controller="ReqAccess" asp-action="Index" asp-route-status="all">
-                    <li class="list-group-item @all">All</li>
+                <li class="list-group-item @all">All</li>
                 </a>
             </ul>
-        </div>
+        </div>*@
     </div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationUser.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>         
-            <th>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<form method="post">
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                
-                <td>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationUser.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product.Title)
+                    </td>
+                    <td id="status">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                {
+                            <div class="row">
+                                <div class="col-12 col-md-3">
+                                    <button asp-action="accept" asp-route-id="@item.Id" type="submit" class="btn btn-success" onclick="return acceptStatus()">Accept</button>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <button asp-action="reject" asp-route-id="@item.Id" class="btn btn-danger" onclick="return rejectStatus()">Reject</button>
+                                </div>
+                            </div>
+                }
+
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</form>
+
+
+
+<script>
+    function acceptStatus() {
+        if (confirm("Would you want to accept this request?")) {
+            swal({
+                icon: "success",
+            });
+            return true;
+        } else {
+            return false;
         }
-    </tbody>
-</table>
+    }
+    function rejectStatus() {
+        if (confirm("Are you sure to reject this request?")) {
+            swal({
+                icon: "success",
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>

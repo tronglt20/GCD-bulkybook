@@ -35,7 +35,7 @@ namespace BulkyBook.Areas.Customer.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-
+        [Authorize]
         public async Task<IActionResult> Detail(int? id)
         {
             
@@ -73,33 +73,30 @@ namespace BulkyBook.Areas.Customer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Detail(ReqAccess Object)
         {
-            Object.Id = 0;
-
+            
             if (ModelState.IsValid)
             {
-
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-                Object.ApplicationUserId = claim.Value;
 
                 ReqAccess reqFromDb = _context.ReqAccess.FirstOrDefault(
-                    u => u.ApplicationUserId == Object.ApplicationUserId && u.ProductId == Object.ProductId);
+                    u => u.ApplicationUserId == claim.Value && u.ProductId == Object.ProductId);
 
                 if (reqFromDb == null)
                 {
                     // no record exits in database for that user for thatproduct
+                    Object.ApplicationUserId = claim.Value;
                     Object.Status = SD.Status_InProcess;
                     _context.ReqAccess.Update(Object);
                 }
                 else
-                { // return POP UP message
+                {
+                    return RedirectToAction("Chapter", new { id = Object.ProductId});
                 }
 
-                _context.SaveChanges();
 
-               // var count = _context.ShoppingCarts
-               //     .ToArrayAsync(u => u.ApplicationUserId == CartObject.ApplicationUserId)
-               //     .ToList().Count();
+
+                _context.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -117,6 +114,15 @@ namespace BulkyBook.Areas.Customer.Controllers
                 return View(obj);
             }
 
+        }
+
+        public async Task<IActionResult> Chapter(int? id)
+        {
+            var applicationDbContext = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.CoverType)
+                .FirstOrDefault(p=>p.Id == id);
+            return View(applicationDbContext);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
