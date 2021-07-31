@@ -24,11 +24,7 @@ namespace BulkyBook.DataAccess.Data
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ReqAccess> ReqAccess { get; set; }
-
-
-
-
-
+        public DbSet<Chapter> Chapters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

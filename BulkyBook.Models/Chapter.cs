@@ -18,6 +18,5 @@ namespace BulkyBook.Models
         public Product Product { get; set; }
 
         public string Content { get; set; }
-
     }
 }

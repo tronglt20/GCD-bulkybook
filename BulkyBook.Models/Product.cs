@@ -46,6 +46,12 @@ namespace BulkyBook.Models
         [ForeignKey("CoverTypeId")]
         public CoverType CoverType { get; set; }
 
+        /*public ICollection<Chapter> Chapter { get; set; }
+        public Product()
+        {
+            this.Chapter = new List<Chapter>();
+        }
+*/
 
     }
 }

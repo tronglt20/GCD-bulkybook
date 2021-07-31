@@ -113,7 +113,7 @@ namespace BulkyBook.Areas.Identity.Pages.Account
                     // Set user role
                     if (user.Role == null)
                     {
-                        await _userManager.AddToRoleAsync(user, SD.Role_User_Indi);
+                        await _userManager.AddToRoleAsync(user, SD.Role_Admin);
                     }
                     else
                     {

@@ -73,7 +73,7 @@ namespace BulkyBook.Areas.Customer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Detail(ReqAccess Object)
         {
-            
+            Object.Id = 0;
             if (ModelState.IsValid)
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -83,18 +83,16 @@ namespace BulkyBook.Areas.Customer.Controllers
                     u => u.ApplicationUserId == claim.Value && u.ProductId == Object.ProductId);
 
                 if (reqFromDb == null)
-                {
+                {                  
                     // no record exits in database for that user for thatproduct
                     Object.ApplicationUserId = claim.Value;
                     Object.Status = SD.Status_InProcess;
-                    _context.ReqAccess.Update(Object);
+                    _context.Add(Object);
                 }
                 else
                 {
                     return RedirectToAction("Chapter", new { id = Object.ProductId});
                 }
-
-
 
                 _context.SaveChanges();
 
@@ -116,13 +114,16 @@ namespace BulkyBook.Areas.Customer.Controllers
 
         }
 
-        public async Task<IActionResult> Chapter(int? id)
+        public IActionResult Chapter(int? id)
         {
-            var applicationDbContext = _context.Products
+            var product = _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.CoverType)
                 .FirstOrDefault(p=>p.Id == id);
-            return View(applicationDbContext);
+
+            Chapter chapter = _context.Chapters.FirstOrDefault(u =>u.ProductId == product.Id);
+      
+            return View(chapter);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

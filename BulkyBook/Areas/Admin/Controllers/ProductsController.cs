@@ -83,7 +83,17 @@ namespace BulkyBook.Areas.Admin.Controllers
                     product.ImageUrl = @"\images\products\" + fileName + extenstion;
                 }
 
+                // Create chapter
+                Chapter chapter = new Chapter()
+                {
+                    Product = product,
+                    ProductId = product.Id,
+                    Content = "Nothing"              
+                };
+
                 _context.Add(product);
+                _context.Add(chapter);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

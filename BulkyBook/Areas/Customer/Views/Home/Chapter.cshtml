@@ -1,4 +1,4 @@
-﻿@model BulkyBook.Models.Product
+﻿@model BulkyBook.Models.Chapter
 
 @{
     ViewData["Title"] = "Details";
@@ -7,36 +7,38 @@
 }
 <div>
     <h4>
-        @Html.DisplayFor(model => model.Title)
+        @Html.DisplayFor(model => model.Product.Title)
     </h4>
     <hr />
     <div class="container backgroundWhite">
         <div class="card p-4">
             <div class="container row">
-                <dl class="col-12 col-md-8 row">                           
+                <dl class="col-12 col-md-8 row">
+                    @Html.DisplayFor(model => model.Content)
                 </dl>
                 <div class="col-12 col-md-4">
-                    <img src="  @Html.DisplayFor(model => model.ImageUrl)" class="card-img-top rounded" />
+                    <img src="  @Html.DisplayFor(model => model.Product.ImageUrl)" class="card-img-top rounded" />
                     <br />
+                    <br />  
                     <dl class="row">
                         <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.Category)
+                            @Html.DisplayNameFor(model => model.Product.Category)
                         </dt>
                         <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.Category.Name)
+                            @Html.DisplayFor(model => model.Product.Category.Name)
                         </dd>
                         <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.CoverType)
+                            @Html.DisplayNameFor(model => model.Product.CoverType)
                         </dt>
                         <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.CoverType.Name)
+                            @Html.DisplayFor(model => model.Product.CoverType.Name)
                         </dd>
 
                         <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.Author)
+                            @Html.DisplayNameFor(model => model.Product.Author)
                         </dt>
                         <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.Author)
+                            @Html.DisplayFor(model => model.Product.Author)
                         </dd>
                     </dl>
                 </div>
