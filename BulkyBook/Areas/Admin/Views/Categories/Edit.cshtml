@@ -5,9 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Category</h4>
+<div class="row d-flex justify-content-between p-3">
+    <div>
+        <h3>Edit Category Information</h3>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-primary btn-square btn-lg form-control">Back to List</a>
+    </div>
+</div>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -26,9 +31,7 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

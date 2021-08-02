@@ -6,22 +6,26 @@
 
 }
 
-<h1>Details</h1>
 
-
-<form  asp-action="Detail"  method="post">
+<form asp-action="Detail" method="post">
     <input type="hidden" asp-for="ProductId" />
     <input type="hidden" value="@Model.Status" id="status" />
-    <div class="container backgroundWhite">
+    <div class="container backgroundWhite mt-4">
+        <div class="row d-flex justify-content-between px-3">
+            <div>
+                <h4>
+                    @Html.DisplayFor(model => model.Product.Title)
+                </h4>
+            </div>
+            <div>
+                <a asp-action="Index" class="btn btn-primary btn-square btn-lg form-control">Back to List</a>
+            </div>
+        </div>
+
+        <hr />
         <div class="card p-4">
             <div class="container row">
                 <dl class="col-12 col-md-8 row">
-                    <dt class="col-sm-4">
-                        @Html.DisplayNameFor(model => model.Product.Title)
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.Product.Title)
-                    </dd>
                     <dt class="col-sm-4">
                         @Html.DisplayNameFor(model => model.Product.Description)
                     </dt>
@@ -46,12 +50,7 @@
                     <dd class="col-sm-8">
                         @Html.DisplayFor(model => model.Product.Category.Name)
                     </dd>
-                    <dt class="col-sm-4">
-                        @Html.DisplayNameFor(model => model.Product.CoverType)
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.Product.CoverType.Name)
-                    </dd>
+
 
                     <dt class="col-sm-4">
                         @Html.DisplayNameFor(model => model.Status)
@@ -61,17 +60,32 @@
                     </dd>
                 </dl>
                 <div class="col-12 col-md-4">
-                    <img src="  @Html.DisplayFor(model => model.Product.ImageUrl)" class="card-img-top rounded" />
+                    <img src="  @Html.DisplayFor(model => model.Product.ImageUrl)" class="card-img-top rounded" style="height:350px; width:100%" />
                 </div>
             </div>
 
             <div class="col-12 col-md-3">
-                <button type="submit" class="btn btn-primary btn-square btn-lg form-control" onclick="return validateStatus()">Read</button>
+                @if (Model.Status == "Block")
+                {
+                    <button type="submit" class="btn btn-secondary btn-square btn-lg form-control" onclick="return validateStatus()">Request to Access</button>
+                }
+                else if (Model.Status == "InProcess")
+                {
+
+                    <button type="submit" class="btn btn-info btn-square btn-lg form-control" onclick="return validateStatus()">Wait for Accept</button>
+                }
+                else if (Model.Status == "Rejected")
+                {
+                    <button type="submit" class="btn btn-danger btn-square btn-lg form-control" onclick="return validateStatus()">Reject to Read</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-success btn-square btn-lg form-control" onclick="return validateStatus()">Read</button>
+
+                }
             </div>
         </div>
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
+
     </div>
 </form>
 
@@ -103,7 +117,7 @@
                 return true;
                 break;
         }
-       
+
     }
 </script>
 

@@ -5,51 +5,42 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-<div>
-    <h4>
-        @Html.DisplayFor(model => model.Product.Title)
-    </h4>
+
+<div class="container backgroundWhite">
+    <div class="row d-flex justify-content-between px-3">
+        <div>
+            <h4>
+                @Html.DisplayFor(model => model.Product.Title)
+            </h4>
+        </div>
+    </div>
     <hr />
-    <div class="container backgroundWhite">
-        <div class="card p-4">
-            <div class="container row">
-                <dl class="col-12 col-md-8 row">
-                    @Html.DisplayFor(model => model.Content)
+    <div class="card p-3">
+        <div class="container row">
+            <dl class="col-12 col-md-8 row text-justify">
+                @Html.DisplayFor(model => model.Content)
+            </dl>
+            <div class="col-12 col-md-4">
+                <img src="  @Html.DisplayFor(model => model.Product.ImageUrl)" class="card-img-top rounded img-responsive" style="min-height:300px;width:100%;" />
+                <br />
+                <br />
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Product.Category)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Product.Category.Name)
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Product.Author)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Product.Author)
+                    </dd>
                 </dl>
-                <div class="col-12 col-md-4">
-                    <img src="  @Html.DisplayFor(model => model.Product.ImageUrl)" class="card-img-top rounded" />
-                    <br />
-                    <br />  
-                    <dl class="row">
-                        <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.Product.Category)
-                        </dt>
-                        <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.Product.Category.Name)
-                        </dd>
-                        <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.Product.CoverType)
-                        </dt>
-                        <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.Product.CoverType.Name)
-                        </dd>
-
-                        <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.Product.Author)
-                        </dt>
-                        <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.Product.Author)
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-3">
-                <button type="submit" class="btn btn-primary btn-square btn-lg form-control" onclick="return validateStatus()">Read</button>
             </div>
         </div>
     </div>
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+

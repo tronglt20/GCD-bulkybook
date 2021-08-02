@@ -31,7 +31,16 @@ namespace BulkyBook.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Products.Include(p => p.Category).Include(p => p.CoverType);
+            var applicationDbContext = _context.Products.Include(p => p.Category);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(string searchInput)
+        {
+            var applicationDbContext = _context.Products.Include(p => p.Category).Where(p=> p.Title.Contains(searchInput));
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -46,7 +55,6 @@ namespace BulkyBook.Areas.Customer.Controllers
 
             var product = await _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.CoverType)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -102,7 +110,6 @@ namespace BulkyBook.Areas.Customer.Controllers
             {
                 var product = await _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.CoverType)
                 .FirstOrDefaultAsync(m => m.Id == Object.ProductId);
                 ReqAccess obj = new ReqAccess()
                 {
@@ -118,7 +125,6 @@ namespace BulkyBook.Areas.Customer.Controllers
         {
             var product = _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.CoverType)
                 .FirstOrDefault(p=>p.Id == id);
 
             Chapter chapter = _context.Chapters.FirstOrDefault(u =>u.ProductId == product.Id);

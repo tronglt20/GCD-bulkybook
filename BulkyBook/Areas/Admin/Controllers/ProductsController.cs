@@ -28,7 +28,7 @@ namespace BulkyBook.Areas.Admin.Controllers
         // GET: Admin/Products
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Products.Include(p => p.Category).Include(p => p.CoverType);
+            var applicationDbContext = _context.Products.Include(p => p.Category);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -42,7 +42,6 @@ namespace BulkyBook.Areas.Admin.Controllers
 
             var product = await _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.CoverType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -56,7 +55,6 @@ namespace BulkyBook.Areas.Admin.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["CoverTypeId"] = new SelectList(_context.CoverTypes, "Id", "Name");
             return View();
         }
 
@@ -65,7 +63,7 @@ namespace BulkyBook.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Author,Price,ImageUrl,CategoryId,CoverTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Author,Price,ImageUrl,CategoryId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -98,7 +96,6 @@ namespace BulkyBook.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            ViewData["CoverTypeId"] = new SelectList(_context.CoverTypes, "Id", "Name", product.CoverTypeId);
             return View(product);
         }
 
@@ -116,7 +113,6 @@ namespace BulkyBook.Areas.Admin.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            ViewData["CoverTypeId"] = new SelectList(_context.CoverTypes, "Id", "Name", product.CoverTypeId);
             return View(product);
         }
 
@@ -175,12 +171,11 @@ namespace BulkyBook.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            ViewData["CoverTypeId"] = new SelectList(_context.CoverTypes, "Id", "Name", product.CoverTypeId);
             return View(product);
         }
 
         // GET: Admin/Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+     /*   public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -189,7 +184,6 @@ namespace BulkyBook.Areas.Admin.Controllers
 
             var product = await _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.CoverType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -197,14 +191,13 @@ namespace BulkyBook.Areas.Admin.Controllers
             }
 
             return View(product);
-        }
+        }*/
 
         // POST: Admin/Products/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? Id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products.FindAsync(Id);
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

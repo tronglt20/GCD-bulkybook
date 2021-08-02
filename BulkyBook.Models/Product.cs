@@ -39,12 +39,7 @@ namespace BulkyBook.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        [Required]
-        [Display(Name = "Cover Type")]
-        public int CoverTypeId { get; set; }
-
-        [ForeignKey("CoverTypeId")]
-        public CoverType CoverType { get; set; }
+       
 
         /*public ICollection<Chapter> Chapter { get; set; }
         public Product()

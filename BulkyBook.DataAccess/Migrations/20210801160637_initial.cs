@@ -61,7 +61,7 @@ namespace BulkyBook.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CoverTypes",
+                name: "CoverType",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -70,7 +70,7 @@ namespace BulkyBook.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CoverTypes", x => x.Id);
+                    table.PrimaryKey("PK_CoverType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,29 +180,6 @@ namespace BulkyBook.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderHeaders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ShippingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderTotal = table.Column<double>(type: "float", nullable: false),
-                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderHeaders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderHeaders_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -226,9 +203,9 @@ namespace BulkyBook.DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_CoverTypes_CoverTypeId",
+                        name: "FK_Products_CoverType_CoverTypeId",
                         column: x => x.CoverTypeId,
-                        principalTable: "CoverTypes",
+                        principalTable: "CoverType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -247,34 +224,6 @@ namespace BulkyBook.DataAccess.Migrations
                     table.PrimaryKey("PK_Chapters", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Chapters_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Count = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderDetails_OrderHeaders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "OrderHeaders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderDetails_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -308,32 +257,34 @@ namespace BulkyBook.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ShoppingCarts",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Count = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingCarts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ShoppingCarts_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ShoppingCarts_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    { "r1", "a38a9e0f-38a3-4b0a-9bff-370ea3c8401b", "Admin", "Admin" },
+                    { "r2", "5a17ade2-4894-4e71-b812-472d8a396df4", "Individual Customer", "Individual Customer" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "9999", 0, "867a9186-2ebc-4e4b-8dd2-8aa591978dd7", "ApplicationUser", "admin@gmail.com", false, false, null, "admin@gmail.com", "admin@gmail.com", "AQAAAAEAACcQAAAAEK7hbIjlw7hOdm0+/yT2Ze/jAaRUetl+siQ0HFoxNFwRk0YyCGHItglOFProqOxO0w==", null, false, "cd1c69ba-144f-4ea0-8ecd-df954ddfa81f", false, "admin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Mystery" },
+                    { 2, "Romance" },
+                    { 3, "Classic" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "r1", "9999" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -380,21 +331,6 @@ namespace BulkyBook.DataAccess.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_OrderId",
-                table: "OrderDetails",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_ProductId",
-                table: "OrderDetails",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderHeaders_ApplicationUserId",
-                table: "OrderHeaders",
-                column: "ApplicationUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
@@ -412,16 +348,6 @@ namespace BulkyBook.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ReqAccess_ProductId",
                 table: "ReqAccess",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCarts_ApplicationUserId",
-                table: "ShoppingCarts",
-                column: "ApplicationUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCarts_ProductId",
-                table: "ShoppingCarts",
                 column: "ProductId");
         }
 
@@ -446,31 +372,22 @@ namespace BulkyBook.DataAccess.Migrations
                 name: "Chapters");
 
             migrationBuilder.DropTable(
-                name: "OrderDetails");
-
-            migrationBuilder.DropTable(
                 name: "ReqAccess");
-
-            migrationBuilder.DropTable(
-                name: "ShoppingCarts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "OrderHeaders");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "CoverTypes");
+                name: "CoverType");
         }
     }
 }
