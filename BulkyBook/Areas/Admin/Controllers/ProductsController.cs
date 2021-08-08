@@ -9,6 +9,7 @@ using BulkyBook.DataAccess.Data;
 using BulkyBook.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using BulkyBook.Models.ViewModels;
 
 namespace BulkyBook.Areas.Admin.Controllers
 {
@@ -51,19 +52,29 @@ namespace BulkyBook.Areas.Admin.Controllers
             return View(product);
         }
 
-        // GET: Admin/Products/Create
-        public IActionResult Create()
+        // GET: Admin/Products/Upsert
+        public async Task<IActionResult> UpSert(int? id)
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            return View();
+
+            if (id == null)
+            {
+                Product product = new Product();
+                return View(product);
+            }
+
+            var productFromDb = await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            return View(productFromDb);
         }
 
-        // POST: Admin/Products/Create
+        // POST: Admin/Products/Upsert
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Author,Price,ImageUrl,CategoryId")] Product product)
+        public async Task<IActionResult> UpSert([Bind("Id,Title,Description,Author,Price,ImageUrl,CategoryId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -74,11 +85,28 @@ namespace BulkyBook.Areas.Admin.Controllers
                     string fileName = Guid.NewGuid().ToString();
                     var uploads = Path.Combine(webRootPath, @"images\products");
                     var extenstion = Path.GetExtension(files[0].FileName);
+
+                    if (product.ImageUrl != null)
+                    {
+                        //this is an edit and we need to remove old image
+                        var imagePath = Path.Combine(webRootPath, product.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+                    }
+
                     using (var filesStreams = new FileStream(Path.Combine(uploads, fileName + extenstion), FileMode.Create))
                     {
                         files[0].CopyTo(filesStreams);
                     }
                     product.ImageUrl = @"\images\products\" + fileName + extenstion;
+                }
+                else
+                {
+                    // Update when they do not change the img
+                    Product productFromDb = _context.Products.FirstOrDefault(p => p.ImageUrl == product.ImageUrl);
+                    product.ImageUrl = productFromDb.ImageUrl;
                 }
 
                 // Create chapter
@@ -86,11 +114,18 @@ namespace BulkyBook.Areas.Admin.Controllers
                 {
                     Product = product,
                     ProductId = product.Id,
-                    Content = "Nothing"              
+                    Content = "Nothing"
                 };
 
-                _context.Add(product);
-                _context.Add(chapter);
+                if (product.Id == 0)
+                {
+                    _context.Add(product);
+                    _context.Add(chapter);
+                }
+                else
+                {
+                    _context.Update(product);
+                }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -99,101 +134,7 @@ namespace BulkyBook.Areas.Admin.Controllers
             return View(product);
         }
 
-        // GET: Admin/Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            return View(product);
-        }
-
-        // POST: Admin/Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Author,Price,ImageUrl,CategoryId,CoverTypeId")] Product product)
-        {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    string webRootPath = _hostEnvironment.WebRootPath;
-                    var files = HttpContext.Request.Form.Files;
-                    if (files.Count > 0)
-                    {
-                        string fileName = Guid.NewGuid().ToString();
-                        var uploads = Path.Combine(webRootPath, @"images\products");
-                        var extenstion = Path.GetExtension(files[0].FileName);
-
-                        if (product.ImageUrl != null)
-                        {
-                            //this is an edit and we need to remove old image
-                            var imagePath = Path.Combine(webRootPath, product.ImageUrl.TrimStart('\\'));
-                            if (System.IO.File.Exists(imagePath))
-                            {
-                                System.IO.File.Delete(imagePath);
-                            }
-                        }
-                      
-                        product.ImageUrl = @"\images\products\" + fileName + extenstion;
-                    }
-
-                    _context.Update(product);
-
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            return View(product);
-        }
-
-        // GET: Admin/Products/Delete/5
-     /*   public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
-        }*/
-
-        // POST: Admin/Products/Delete/5
         [HttpPost]
         public async Task<IActionResult> Delete(int? Id)
         {

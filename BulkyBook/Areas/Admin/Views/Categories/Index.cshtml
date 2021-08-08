@@ -10,7 +10,10 @@
         <h3>Category's List</h3>
     </div>
     <div>
-        <a asp-action="Create" class="btn btn-primary btn-square btn-lg form-control">Create New</a>
+        <a asp-action="Create" class="btn btn-primary btn-square btn-lg form-control">
+            <i class="fas fa-plus"></i>
+            Create New
+        </a>
     </div>
 </div>
 <table class="table">
@@ -19,28 +22,35 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-           
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-    var Id = item.Id;
+        @foreach (var item in Model)
+        {
+            var Id = item.Id;
 
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-         
-            <td class="row">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="m-2">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id" class="m-2">Details</a> |
-                <form asp-action="Delete" class="ml-2">
-                    <input type="hidden" asp-for="@Id" />
-                    <button type="submit" class="btn btn-danger" onclick="return deleteObject()">Delete</button>
-                </form>
-            </td>
-        </tr>
-}
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td class="row">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="m-2">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="m-2">Details</a> |
+                    <form asp-action="Delete" class="ml-2">
+                        <input type="hidden" asp-for="@Id" />
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return deleteObject()">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<script>
+    function deleteObject() {
+        return confirm("Are you sure to delete this Category?");
+    }
+</script>

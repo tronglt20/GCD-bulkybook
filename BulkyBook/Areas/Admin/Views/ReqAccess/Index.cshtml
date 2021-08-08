@@ -32,7 +32,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
+                <th>
 
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -56,10 +58,10 @@
                 {
                             <div class="row">
                                 <div class="col-12 col-md-3">
-                                    <button asp-action="accept" asp-route-id="@item.Id" type="submit" class="btn btn-success" onclick="return acceptStatus()">Accept</button>
+                                    <button asp-action="accept" asp-route-id="@item.Id" type="submit" class="btn btn-success btn-sm" onclick="return acceptStatus()">Accept</button>
                                 </div>
                                 <div class="col-12 col-md-3">
-                                    <button asp-action="reject" asp-route-id="@item.Id" class="btn btn-danger" onclick="return rejectStatus()">Reject</button>
+                                    <button asp-action="reject" asp-route-id="@item.Id" class="btn btn-danger btn-sm" onclick="return rejectStatus()">Reject</button>
                                 </div>
                             </div>
                 }

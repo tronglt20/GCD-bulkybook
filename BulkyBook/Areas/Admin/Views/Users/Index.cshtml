@@ -4,10 +4,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<div class="row d-flex p-3">
+<div class="row d-flex justify-content-between p-3">
     <div>
         <h3>User's List</h3>
+    </div>
+    <div>
+        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-square btn-lg form-control">
+            <i class="fas fa-plus"></i>
+            Create new User
+        </a>
     </div>
 </div>
 <table class="table">
@@ -25,6 +30,7 @@
     <tbody>
         @foreach (var item in Model)
         {
+            var Id = item.Id;
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
@@ -33,6 +39,24 @@
                     @Html.DisplayFor(modelItem => item.Role)
                 </td>
                 <td>
+                    <form asp-action="LockUnLock">
+                        <input type="hidden" asp-for="@Id" />
+                        @if (item.LockoutEnd != null && item.LockoutEnd > DateTime.Now)
+                        {
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-lock-open"></i>
+                                UnLock
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fas fa-lock"></i>
+                                Lock
+                            </button>
+                        }
+                    </form>
+
                 </td>
             </tr>
         }
